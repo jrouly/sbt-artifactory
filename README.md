@@ -5,8 +5,6 @@
 A tiny sbt plugin to streamline publishing to [JFrog Artifactory](https://jfrog.com/artifactory/).
 Motivated by the [sunsetting of Bintray](https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter/).
 
-This plugin [uses itself to publish itself](project/plugins.sbt#L4-L6).
-
 # Usage
 
 Add to your `project/plugins.sbt`
