@@ -59,18 +59,18 @@ object ArtifactoryPlugin extends AutoPlugin {
       else "maven-release-local"
     },
 
-    artifactorySnapshotResolver := {
+    artifactorySnapshotResolver := Def.settingDyn {
       val repository = artifactorySnapshotRepository.value
-      artifactoryResolver(repository).value
-    },
+      artifactoryResolver(repository)
+    }.value,
 
-    artifactoryReleaseResolver := {
+    artifactoryReleaseResolver := Def.settingDyn {
       val repository = artifactoryReleaseRepository.value
-      artifactoryResolver(repository).value
-    }
+      artifactoryResolver(repository)
+    }.value
   )
 
-  private def artifactoryResolver(repository: String) = Def.setting {
+  private def artifactoryResolver(repository: String): Def.Initialize[URLRepository] = Def.setting {
     val baseUrl = {
       val protocol = artifactoryProtocol.value
       val host = artifactoryHostname.value
