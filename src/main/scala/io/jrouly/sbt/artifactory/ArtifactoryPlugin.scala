@@ -46,6 +46,7 @@ object ArtifactoryPlugin extends AutoPlugin {
     artifactoryPort := 443,
     artifactoryProtocol := "https",
     artifactoryHostname := "localhost",
+    artifactoryPath := "artifactory",
 
     artifactorySnapshotRepository := {
       val isMaven = Keys.publishMavenStyle.value
