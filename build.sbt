@@ -26,20 +26,7 @@ sbtPlugin := true
 crossSbtVersions := List("0.13.18", "1.4.6")
 
 publishMavenStyle := false
-
-credentials += Credentials(
-  "Artifactory Realm",
-  "jrouly.jfrog.io",
-  sys.env.getOrElse("ARTIFACTORY_USER", "user"),
-  sys.env.getOrElse("ARTIFACTORY_PASS", "pass")
-)
-
-publishTo := {
-  def resolver(host: String, repo: String) =
-    Resolver.url(repo, url(s"https://$host/artifactory/$repo"))(Resolver.ivyStylePatterns)
-  if (isSnapshot.value) Some(resolver("jrouly.jfrog.io", "ivy-snapshot-local"))
-  else Some(resolver("jrouly.jfrog.io", "ivy-release-local"))
-}
+artifactoryCloudOrganization := Some("jrouly")
 
 scriptedBufferLog := false
 scriptedLaunchOpts := {
