@@ -35,6 +35,13 @@ artifactoryProtocol := "http" // defaults to https
 artifactoryPath := "artifactory/foo/bar" // defaults to artifactory
 ```
 
+#### JFrog Artifactory cloud
+
+If you are a JFrog Artifactory cloud user (`*.jfrog.io`), you can instead just set your cloud organization name
+```sbt
+artifactoryCloudOrganization := Some("jrouly") // defaults to None
+```
+
 ### Repository names
 
 By default, the plugin will anticipate the repository names `ivy-{snapshot|release}-local` and `maven-{snapshot|release}-local` based on the value of `publishMavenStyle`.
@@ -55,6 +62,7 @@ If you use a single repository for both snapshots and releases, just set the key
 | `artifactoryProtocol` | `String` | Artifactory URL protocol. Defaults to `https`. |
 | `artifactoryHostname` | `String` | Artifactory hostname. Defaults to `localhost`. |
 | `artifactoryPath` | `String` | Artifactory URL path prefix. Defaults to `artifactory`. |
+| `artifactoryCloudOrganization` | `Option[String]` | Artifactory cloud organization name. If set, the hostname is overridden to `$org.jfrog.io`. |
 | `artifactorySnapshotRepository` | `String` | Artifactory snapshot repository label. Defaults to `ivy-snapshot-local` or `maven-snapshot-local`. |
 | `artifactoryReleaseRepository` | `String` | Artifactory release repository label. Defaults to `ivy-release-local` or `maven-release-local`. |
 

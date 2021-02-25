@@ -15,6 +15,8 @@ object ArtifactoryPlugin extends AutoPlugin {
     final val artifactoryHostname = settingKey[String]("Artifactory hostname (defaults to localhost)")
     final val artifactoryPath = settingKey[String]("Artifactory URL path (defaults to artifactory)")
 
+    final val artifactoryCloudOrganization = settingKey[Option[String]]("Artifactory Cloud organization name.")
+
     final val artifactorySnapshotRepository = settingKey[String]("Artifactory snapshot repository label")
     final val artifactoryReleaseRepository = settingKey[String]("Artifactory release repository label")
 
@@ -48,6 +50,8 @@ object ArtifactoryPlugin extends AutoPlugin {
     artifactoryHostname := "localhost",
     artifactoryPath := "artifactory",
 
+    artifactoryCloudOrganization := None,
+
     artifactorySnapshotRepository := {
       val isMaven = Keys.publishMavenStyle.value
       if (isMaven) "maven-snapshot-local"
@@ -72,12 +76,14 @@ object ArtifactoryPlugin extends AutoPlugin {
   )
 
   private def artifactoryResolver(repository: String): Def.Initialize[URLRepository] = Def.setting {
-    val baseUrl = {
-      val protocol = artifactoryProtocol.value
-      val host = artifactoryHostname.value
-      val port = artifactoryPort.value
-      val path = artifactoryPath.value.stripPrefix("/").stripSuffix("/")
-      url(s"$protocol://$host:$port/$path/$repository")
+    val baseUrl = artifactoryCloudOrganization.value match {
+      case Some(org) => url(s"https://$org.jfrog.io/artifactory/$repository")
+      case None =>
+        val protocol = artifactoryProtocol.value
+        val host = artifactoryHostname.value
+        val port = artifactoryPort.value
+        val path = artifactoryPath.value.stripPrefix("/").stripSuffix("/")
+        url(s"$protocol://$host:$port/$path/$repository")
     }
 
     val isMaven = Keys.publishMavenStyle.value
