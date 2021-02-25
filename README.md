@@ -55,11 +55,8 @@ If you use a single repository for both snapshots and releases, just set the key
 
 | Key | Type | Description |
 | --- | ---- | ----------- |
-| `artifactoryPort` | `Int` | Artifactory URL port. Defaults to `443`. |
-| `artifactoryProtocol` | `String` | Artifactory URL protocol. Defaults to `https`. |
-| `artifactoryHostname` | `String` | Artifactory hostname. Defaults to `localhost`. |
-| `artifactoryPath` | `String` | Artifactory URL path prefix. Defaults to `artifactory`. |
-| `artifactoryCloudOrganization` | `Option[String]` | Artifactory cloud organization name. If set, the hostname is overridden to `$org.jfrog.io`. |
+| `artifactoryBaseUrl` | `URL` | Artifactory base URL. |
+| `artifactoryCloudOrganization` | `Option[String]` | Artifactory cloud organization name (if not using a custom base url). |
 | `artifactorySnapshotRepository` | `String` | Artifactory snapshot repository label. Defaults to `ivy-snapshot-local` or `maven-snapshot-local`. |
 | `artifactoryReleaseRepository` | `String` | Artifactory release repository label. Defaults to `ivy-release-local` or `maven-release-local`. |
 
