@@ -26,23 +26,19 @@ You can also set your own [credentials file](https://www.scala-sbt.org/1.x/docs/
 
 ### Artifactory connection
 
-Set the host name for your Artifactory install.
-You can also set the port, protocol, and a URL path prefix.
+Set the base url for your Artifactory install.
 
 ```sbt
-artifactoryHostname := "jrouly.jfrog.io" // defaults to localhost
-artifactoryPort := 80 // defaults to 443
-artifactoryProtocol := "http" // defaults to https
-artifactoryPath := "artifactory/foo/bar" // defaults to artifactory
+artifactoryBaseUrl := url("https://artifacts.mycompany.biz:1234/artifacts")
 ```
 
 #### JFrog Artifactory cloud
 
 If you are a JFrog Artifactory cloud user (`*.jfrog.io`), you can instead just set your cloud organization name.
-This will ignore any other Artifactory connection settings.
+This will set the base url for you.
 
 ```sbt
-artifactoryCloudOrganization := Some("jrouly") // defaults to None
+artifactoryCloudOrganization := Some("jrouly")
 ```
 
 ### Repository names

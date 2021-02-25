@@ -10,12 +10,8 @@ object ArtifactoryPlugin extends AutoPlugin {
   override def trigger: sbt.PluginTrigger = allRequirements
 
   object autoImport {
-    final val artifactoryPort = settingKey[Int]("Artifactory port (defaults to 443)")
-    final val artifactoryProtocol = settingKey[String]("Artifactory protocol (defaults to https)")
-    final val artifactoryHostname = settingKey[String]("Artifactory hostname (defaults to localhost)")
-    final val artifactoryPath = settingKey[String]("Artifactory URL path (defaults to artifactory)")
-
-    final val artifactoryCloudOrganization = settingKey[Option[String]]("Artifactory Cloud organization name.")
+    final val artifactoryBaseUrl = settingKey[URL]("Artifactory base URL")
+    final val artifactoryCloudOrganization = settingKey[Option[String]]("Artifactory Cloud organization name")
 
     final val artifactorySnapshotRepository = settingKey[String]("Artifactory snapshot repository label")
     final val artifactoryReleaseRepository = settingKey[String]("Artifactory release repository label")
@@ -38,17 +34,19 @@ object ArtifactoryPlugin extends AutoPlugin {
     },
     Keys.credentials += Credentials(
       realm = "Artifactory Realm",
-      host = artifactoryHostname.value,
+      host = artifactoryBaseUrl.value.getHost,
       userName = sys.env.getOrElse("ARTIFACTORY_USER", "username"),
       passwd = sys.env.getOrElse("ARTIFACTORY_PASS", "password")
     )
   )
 
   private lazy val defaultSettings = Seq(
-    artifactoryPort := 443,
-    artifactoryProtocol := "https",
-    artifactoryHostname := "localhost",
-    artifactoryPath := "artifactory",
+    artifactoryBaseUrl := {
+      artifactoryCloudOrganization.value match {
+        case Some(org) => url(s"https://$org.jfrog.io/artifactory")
+        case None => url("http://localhost:80/artifactory")
+      }
+    },
 
     artifactoryCloudOrganization := None,
 
@@ -76,16 +74,7 @@ object ArtifactoryPlugin extends AutoPlugin {
   )
 
   private def artifactoryResolver(repository: String): Def.Initialize[URLRepository] = Def.setting {
-    val baseUrl = artifactoryCloudOrganization.value match {
-      case Some(org) => url(s"https://$org.jfrog.io/artifactory/$repository")
-      case None =>
-        val protocol = artifactoryProtocol.value
-        val host = artifactoryHostname.value
-        val port = artifactoryPort.value
-        val path = artifactoryPath.value.stripPrefix("/").stripSuffix("/")
-        url(s"$protocol://$host:$port/$path/$repository")
-    }
-
+    val baseUrl = artifactoryBaseUrl.value
     val isMaven = Keys.publishMavenStyle.value
 
     val pattern = if (isMaven) Resolver.mavenStylePatterns else Resolver.ivyStylePatterns
