@@ -74,10 +74,10 @@ object ArtifactoryPlugin extends AutoPlugin {
   )
 
   private def artifactoryResolver(repository: String): Def.Initialize[URLRepository] = Def.setting {
-    val baseUrl = artifactoryBaseUrl.value
+    val repositoryUrl = s"${artifactoryBaseUrl.value}/$repository"
     val isMaven = Keys.publishMavenStyle.value
 
     val pattern = if (isMaven) Resolver.mavenStylePatterns else Resolver.ivyStylePatterns
-    Resolver.url(repository, baseUrl)(pattern)
+    Resolver.url(repository, url(repositoryUrl))(pattern)
   }
 }
