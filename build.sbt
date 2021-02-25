@@ -29,8 +29,6 @@ publishMavenStyle := false
 artifactoryCloudOrganization := Some("jrouly")
 
 scriptedBufferLog := false
-scriptedLaunchOpts := {
-  scriptedLaunchOpts.value ++ Seq("-Xmx1024M", "-server", "-Dplugin.version=" + version.value)
-}
+scriptedLaunchOpts := scriptedLaunchOpts.value ++ Seq("-Xmx1024M", "-server", "-Dplugin.version=" + version.value)
 
 Global / onChangedBuildSource := ReloadOnSourceChanges

@@ -22,23 +22,20 @@ The plugin anticipates credentials in the environment variables `ARTIFACTORY_USE
 
 You can also set your own [credentials file](https://www.scala-sbt.org/1.x/docs/Publishing.html#Credentials).
 
+### Realm
+
+The default credential realm is set to `Artifactory Realm` but this can be overridden with `artifactoryRealm`.
+
 ## Configuration
 
 ### Artifactory connection
 
-Set the base url for your Artifactory install.
+Configure the connection for your Artifactory install.
 
 ```sbt
-artifactoryBaseUrl := url("https://artifacts.mycompany.biz:1234/artifacts")
-```
-
-#### JFrog Artifactory cloud
-
-If you are a JFrog Artifactory cloud user (`*.jfrog.io`), you can instead just set your cloud organization name.
-This will set the base url for you.
-
-```sbt
-artifactoryCloudOrganization := Some("jrouly")
+artifactoryConnection := artifactoryHttp("artifacts.mycompany.biz", "/path/to/artifactory")
+artifactoryConnection := artifactoryHttps("secure.artifacts.mycompany.biz", "/path/to/artifactory")
+artifactoryConnection := artifactoryCloud("jrouly") // https://jrouly.jfrog.io
 ```
 
 ### Repository names
@@ -57,8 +54,8 @@ If you use a single repository for both snapshots and releases, just set the key
 
 | Key | Type | Description |
 | --- | ---- | ----------- |
-| `artifactoryBaseUrl` | `URL` | Artifactory base URL. |
-| `artifactoryCloudOrganization` | `Option[String]` | Artifactory cloud organization name (if not using a custom base url). |
+| `artifactoryConnection` | `ArtifactoryConnection` | Artifactory connection configuration. |
+| `artifactoryRealm` | `String` | Artifactory credential realm. Defaults to `Artifactory Realm`. |
 | `artifactorySnapshotRepository` | `String` | Artifactory snapshot repository label. Defaults to `ivy-snapshot-local` or `maven-snapshot-local`. |
 | `artifactoryReleaseRepository` | `String` | Artifactory release repository label. Defaults to `ivy-release-local` or `maven-release-local`. |
 
