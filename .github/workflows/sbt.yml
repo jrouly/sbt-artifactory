@@ -1,0 +1,31 @@
+name: Scala CI
+
+on:
+  push:
+  pull_request:
+  release:
+    types:
+      - 'published'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Scala
+        uses: olafurpg/setup-scala@v10
+        with:
+          java-version: "adopt@1.8"
+      - name: Coursier cache
+        uses: coursier/cache-action@v5
+      - name: Build and test
+        run: sbt ^test ^scripted
+      - name: Publish
+        if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')
+        env:
+          ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
+          ARTIFACTORY_PASS: ${{ secrets.ARTIFACTORY_PASS }}
+        run: sbt ^publish
