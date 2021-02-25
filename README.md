@@ -33,9 +33,11 @@ The default credential realm is set to `Artifactory Realm` but this can be overr
 Configure the connection for your Artifactory install.
 
 ```sbt
-artifactoryConnection := artifactoryHttp("artifacts.mycompany.biz", "/path/to/artifactory")
-artifactoryConnection := artifactoryHttps("secure.artifacts.mycompany.biz", "/path/to/artifactory")
-artifactoryConnection := artifactoryCloud("jrouly") // https://jrouly.jfrog.io
+artifactoryConnection := artifactoryCloud("mycompany") // https://mycompany.jfrog.io
+artifactoryConnection := artifactoryHttps("artifacts.mycompany.biz")
+artifactoryConnection := artifactoryHttps("artifacts.mycompany.biz", "/custom/path/to/artifactory")
+artifactoryConnection := artifactoryHttp("insecure.artifacts.mycompany.biz")
+artifactoryConnection := artifactoryHttp("insecure.artifacts.mycompany.biz", "/custom/path/to/artifactory")
 ```
 
 ### Repository names
