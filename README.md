@@ -27,7 +27,6 @@ You can also set your own [credentials file](https://www.scala-sbt.org/1.x/docs/
 Set the host name for your Artifactory install.
 You can also set the port, protocol, and a URL path prefix.
 
-For example
 ```sbt
 artifactoryHostname := "jrouly.jfrog.io" // defaults to localhost
 artifactoryPort := 80 // defaults to 443
@@ -37,7 +36,9 @@ artifactoryPath := "artifactory/foo/bar" // defaults to artifactory
 
 #### JFrog Artifactory cloud
 
-If you are a JFrog Artifactory cloud user (`*.jfrog.io`), you can instead just set your cloud organization name
+If you are a JFrog Artifactory cloud user (`*.jfrog.io`), you can instead just set your cloud organization name.
+This will ignore any other Artifactory connection settings.
+
 ```sbt
 artifactoryCloudOrganization := Some("jrouly") // defaults to None
 ```
@@ -46,7 +47,7 @@ artifactoryCloudOrganization := Some("jrouly") // defaults to None
 
 By default, the plugin will anticipate the repository names `ivy-{snapshot|release}-local` and `maven-{snapshot|release}-local` based on the value of `publishMavenStyle`.
 
-If these don't work for you, you can override the settings
+If these don't work for you, you can override the settings.
 ```sbt
 artifactorySnapshotRepository := "sbt-snapshot"
 artifactoryReleaseRepository := "sbt-release"
