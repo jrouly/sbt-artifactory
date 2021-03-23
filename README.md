@@ -71,8 +71,8 @@ You can override `publishTo` if the defaults don't work for you.
 You can also add custom Artifactory resolvers for dependency resolution.
 
 ```sbt
-resolvers += Resolver.artifactoryIvyRepo("ivy-release").value
-resolvers += Resolver.artifactoryRepo("maven-release").value
+resolvers += Resolver.artifactoryIvyRepo(artifactory.value, "ivy-release")
+resolvers += Resolver.artifactoryRepo(artifactory.value, "maven-release")
 ```
 
 ## sbt keys

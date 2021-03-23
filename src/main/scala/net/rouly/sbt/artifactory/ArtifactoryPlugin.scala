@@ -62,16 +62,18 @@ object ArtifactoryPlugin extends AutoPlugin {
       else "ivy-release-local"
     },
 
-    artifactorySnapshotResolver := Def.settingDyn {
+    artifactorySnapshotResolver := {
       val repository = artifactorySnapshotRepository.value
-      if (Keys.publishMavenStyle.value) Resolver.artifactoryRepo(repository)
-      else Resolver.artifactoryIvyRepo(repository)
-    }.value,
+      val connection = artifactory.value
+      if (Keys.publishMavenStyle.value) Resolver.artifactoryRepo(connection, repository)
+      else Resolver.artifactoryIvyRepo(connection, repository)
+    },
 
-    artifactoryReleaseResolver := Def.settingDyn {
+    artifactoryReleaseResolver := {
       val repository = artifactoryReleaseRepository.value
-      if (Keys.publishMavenStyle.value) Resolver.artifactoryRepo(repository)
-      else Resolver.artifactoryIvyRepo(repository)
-    }.value
+      val connection = artifactory.value
+      if (Keys.publishMavenStyle.value) Resolver.artifactoryRepo(connection, repository)
+      else Resolver.artifactoryIvyRepo(connection, repository)
+    }
   )
 }
