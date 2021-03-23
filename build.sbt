@@ -26,7 +26,6 @@ sbtPlugin := true
 
 crossSbtVersions := List(
   "0.13.18",
-  "1.0.4",
   "1.4.9"
 )
 
