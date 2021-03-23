@@ -1,4 +1,4 @@
-package io.jrouly.sbt.artifactory
+package net.rouly.sbt.artifactory
 
 sealed trait ArtifactoryConnection {
   def hostname: String
