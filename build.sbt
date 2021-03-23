@@ -30,7 +30,7 @@ crossSbtVersions := List(
 )
 
 publishMavenStyle := false
-artifactoryConnection := artifactoryCloud("jrouly")
+artifactory := artifactoryCloud("jrouly")
 
 scriptedBufferLog := false
 scriptedLaunchOpts := scriptedLaunchOpts.value ++ Seq("-Xmx1024M", "-server", "-Dplugin.version=" + version.value)
