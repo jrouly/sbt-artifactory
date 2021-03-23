@@ -1,4 +1,4 @@
-package io.jrouly.sbt.artifactory
+package net.rouly.sbt.artifactory
 
 import sbt._
 import sbt.plugins.JvmPlugin
@@ -11,7 +11,7 @@ object ArtifactoryPlugin extends AutoPlugin {
 
   override def trigger: sbt.PluginTrigger = allRequirements
 
-  object autoImport {
+  object autoImport extends ArtifactoryPluginKeys with ArtifactoryImplicits {
 
     def artifactoryHttp(hostname: String, path: String = "artifactory"): ArtifactoryUrl =
       ArtifactoryUrl("http", hostname, 80, path)
@@ -22,15 +22,6 @@ object ArtifactoryPlugin extends AutoPlugin {
     def artifactoryCloud(organization: String): ArtifactoryCloud =
       ArtifactoryCloud(organization)
 
-    final val artifactoryConnection = settingKey[ArtifactoryConnection]("Artifactory connection settings")
-
-    final val artifactoryRealm = settingKey[String]("Artifactory credential realm")
-
-    final val artifactorySnapshotRepository = settingKey[String]("Artifactory snapshot repository")
-    final val artifactoryReleaseRepository = settingKey[String]("Artifactory release repository")
-
-    final val artifactorySnapshotResolver = settingKey[URLRepository]("Artifactory snapshot resolver")
-    final val artifactoryReleaseResolver = settingKey[URLRepository]("Artifactory release resolver")
   }
 
   import autoImport._
@@ -48,14 +39,14 @@ object ArtifactoryPlugin extends AutoPlugin {
 
     Keys.credentials += Credentials(
       realm = artifactoryRealm.value,
-      host = artifactoryConnection.value.hostname,
+      host = artifactory.value.hostname,
       userName = sys.env.getOrElse("ARTIFACTORY_USER", "username"),
       passwd = sys.env.getOrElse("ARTIFACTORY_PASS", "password")
     )
   )
 
   private lazy val defaultSettings = Seq(
-    artifactoryConnection := artifactoryHttp("localhost", "artifactory"),
+    artifactory := artifactoryHttp("localhost", "artifactory"),
 
     artifactoryRealm := "Artifactory Realm",
 
@@ -73,30 +64,14 @@ object ArtifactoryPlugin extends AutoPlugin {
 
     artifactorySnapshotResolver := Def.settingDyn {
       val repository = artifactorySnapshotRepository.value
-      artifactoryResolver(repository)
+      if (Keys.publishMavenStyle.value) Resolver.artifactoryRepo(repository)
+      else Resolver.artifactoryIvyRepo(repository)
     }.value,
 
     artifactoryReleaseResolver := Def.settingDyn {
       val repository = artifactoryReleaseRepository.value
-      artifactoryResolver(repository)
+      if (Keys.publishMavenStyle.value) Resolver.artifactoryRepo(repository)
+      else Resolver.artifactoryIvyRepo(repository)
     }.value
   )
-
-  private def artifactoryResolver(repository: String): Def.Initialize[URLRepository] = Def.setting {
-    val repositoryUrl = {
-      artifactoryConnection.value match {
-        case ArtifactoryUrl(protocol, hostname, port, path) =>
-          val cleanProtocol = protocol.stripSuffix("://")
-          val cleanPath = path.stripPrefix("/").stripSuffix("/")
-          s"$cleanProtocol://$hostname:$port/$cleanPath/$repository"
-        case cloud @ ArtifactoryCloud(_) =>
-          s"https://${cloud.hostname}/artifactory/$repository"
-      }
-    }
-
-    val isInsecure = repositoryUrl.startsWith("http://")
-    val isMaven = Keys.publishMavenStyle.value
-    val pattern = if (isMaven) Resolver.mavenStylePatterns else Resolver.ivyStylePatterns
-    HandleInsecure(Resolver.url(repository, url(repositoryUrl))(pattern), isInsecure)
-  }
 }
