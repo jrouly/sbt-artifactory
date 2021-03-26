@@ -14,7 +14,7 @@ jobs:
         with:
           java-version: "adopt@1.8"
       - uses: coursier/cache-action@v5
-      - uses: AvaPL/scalafmt-native-formatter@v0.1.0
+      - uses: jrouly/scalafmt-native-action@v1
       - run: csbt ^test ^scripted
       - run: csbt ^publish
         if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')
