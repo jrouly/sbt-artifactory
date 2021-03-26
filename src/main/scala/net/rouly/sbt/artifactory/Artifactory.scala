@@ -14,7 +14,7 @@ private object Artifactory {
           val cleanProtocol = protocol.stripSuffix("://")
           val cleanPath = path.stripPrefix("/").stripSuffix("/")
           s"$cleanProtocol://$hostname:$port/$cleanPath/$repository"
-        case cloud@ArtifactoryCloud(_) =>
+        case cloud @ ArtifactoryCloud(_) =>
           s"https://${cloud.hostname}/artifactory/$repository"
       }
     }

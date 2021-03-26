@@ -36,7 +36,6 @@ object ArtifactoryPlugin extends AutoPlugin {
       if (isSnapshot) snapshotResolver
       else releaseResolver
     },
-
     Keys.credentials += Credentials(
       realm = artifactoryRealm.value,
       host = artifactory.value.hostname,
@@ -47,28 +46,23 @@ object ArtifactoryPlugin extends AutoPlugin {
 
   private lazy val defaultSettings = Seq(
     artifactory := artifactoryHttp("localhost", "artifactory"),
-
     artifactoryRealm := "Artifactory Realm",
-
     artifactorySnapshotRepository := {
       val isMaven = Keys.publishMavenStyle.value
       if (isMaven) "maven-snapshot-local"
       else "ivy-snapshot-local"
     },
-
     artifactoryReleaseRepository := {
       val isMaven = Keys.publishMavenStyle.value
       if (isMaven) "maven-release-local"
       else "ivy-release-local"
     },
-
     artifactorySnapshotResolver := {
       val repository = artifactorySnapshotRepository.value
       val connection = artifactory.value
       if (Keys.publishMavenStyle.value) Resolver.artifactoryRepo(connection, repository)
       else Resolver.artifactoryIvyRepo(connection, repository)
     },
-
     artifactoryReleaseResolver := {
       val repository = artifactoryReleaseRepository.value
       val connection = artifactory.value
