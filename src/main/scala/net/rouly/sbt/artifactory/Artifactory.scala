@@ -1,11 +1,16 @@
 package net.rouly.sbt.artifactory
 
-import sbt._
+import sbt.{Patterns, Resolver, URLRepository, url}
 
-private object Artifactory {
+sealed trait Artifactory {
 
-  def connection(
-    connection: ArtifactoryConnection,
+  def hostname: String
+}
+
+object Artifactory {
+
+  def resolver(
+    connection: Artifactory,
     repository: String
   )(implicit patterns: Patterns): URLRepository = {
     val repositoryUrl: String = {
@@ -21,4 +26,18 @@ private object Artifactory {
 
     Resolver.url(repository, url(repositoryUrl))
   }
+}
+
+case class ArtifactoryUrl(
+  protocol: String,
+  hostname: String,
+  port: Int,
+  path: String
+) extends Artifactory
+
+case class ArtifactoryCloud(
+  organization: String
+) extends Artifactory {
+
+  override lazy val hostname: String = s"$organization.jfrog.io"
 }

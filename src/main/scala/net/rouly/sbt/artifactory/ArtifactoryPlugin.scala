@@ -21,12 +21,13 @@ object ArtifactoryPlugin extends AutoPlugin {
 
     def artifactoryCloud(organization: String): ArtifactoryCloud =
       ArtifactoryCloud(organization)
-
   }
 
   import autoImport._
 
-  override def projectSettings: Seq[Def.Setting[_]] = defaultSettings ++ Seq(
+  override def projectSettings: Seq[Def.Setting[_]] = artifactorySettings ++ publicationSettings
+
+  private lazy val publicationSettings = Seq(
     Keys.publishTo := {
       val isSnapshot = Keys.isSnapshot.value
 
@@ -44,7 +45,7 @@ object ArtifactoryPlugin extends AutoPlugin {
     )
   )
 
-  private lazy val defaultSettings = Seq(
+  private lazy val artifactorySettings = Seq(
     artifactory := artifactoryHttp("localhost", "artifactory"),
     artifactoryRealm := "Artifactory Realm",
     artifactorySnapshotRepository := {

@@ -4,7 +4,7 @@ import sbt.{Resolver, settingKey}
 
 trait ArtifactoryPluginKeys {
 
-  final val artifactory = settingKey[ArtifactoryConnection]("Artifactory connection settings")
+  final val artifactory = settingKey[Artifactory]("Artifactory connection settings")
 
   final val artifactoryRealm = settingKey[String]("Artifactory credential realm")
 
