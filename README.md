@@ -1,7 +1,7 @@
 # sbt-artifactory
 
 [![Scala CI](https://github.com/jrouly/sbt-artifactory/workflows/Scala%20CI/badge.svg?branch=main)](https://github.com/jrouly/sbt-artifactory/actions?query=workflow%3A%22Scala+CI%22)
-[![version](https://img.shields.io/badge/version-0.3.2-blue)](https://github.com/jrouly/sbt-artifactory/releases)
+[![version](https://img.shields.io/badge/version-0.4.0-blue)](https://github.com/jrouly/sbt-artifactory/releases)
 
 A tiny sbt plugin to streamline resolving against [JFrog Artifactory](https://jfrog.com/artifactory/).
 Motivated by the [sunsetting of Bintray](https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter/).
