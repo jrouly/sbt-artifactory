@@ -2,9 +2,6 @@ name := "sbt-artifactory"
 organization := "net.rouly"
 description := "Streamlines JFrog Artifactory integration."
 
-homepage := Some(url("https://github.com/jrouly/sbt-artifactory"))
-licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
-
 artifactory := artifactoryCloud("jrouly")
 
 scriptedBufferLog := false

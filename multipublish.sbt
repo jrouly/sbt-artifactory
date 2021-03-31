@@ -1,3 +1,4 @@
+import com.jsuereth.sbtpgp.PgpKeys.publishSigned
 import sbt._
 
 commands += Command.command("multiPublish") { state =>
@@ -29,13 +30,13 @@ commands += Command.command("multiPublish") { state =>
   )
 
   Project.runTask(
-    publish in Compile,
+    publishSigned in Compile,
     extracted.appendWithSession(sonatypeSettings, state),
     checkCycles = true
   )
 
   Project.runTask(
-    publish in Compile,
+    publishSigned in Compile,
     extracted.appendWithSession(artifactorySettings, state),
     checkCycles = true
   )
