@@ -6,14 +6,39 @@
 A tiny sbt plugin to streamline resolving against [JFrog Artifactory](https://jfrog.com/artifactory/).
 Motivated by the [sunsetting of Bintray](https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter/).
 
-This plugin [uses itself to publish itself](project/plugins.sbt#L9-L10).
+This plugin [uses itself to publish itself](project/plugins.sbt#L4-L5).
+
+# Quickstart
+
+Install the plugin.
+```sbt
+addSbtPlugin("net.rouly" % "sbt-artifactory" % "version")
+```
+
+Define your Artifactory connection.
+```sbt
+artifactory := artifactoryCloud("mycompany") // https://mycompany.jfrog.io
+artifactory := artifactoryHttps("artifacts.mycompany.biz")
+artifactory := artifactoryHttps("artifacts.mycompany.biz", "/custom/path/to/artifactory")
+artifactory := artifactoryHttp("insecure.artifacts.mycompany.biz")
+artifactory := artifactoryHttp("insecure.artifacts.mycompany.biz", "/custom/path/to/artifactory")
+```
+
+Set your Artifactory credentials in the environment.
+```
+ARTIFACTORY_USER=
+ARTIFACTORY_PASS=
+```
+
+You're done!
 
 # Usage
+
+## Installation
 
 Add to your `project/plugins.sbt`
 
 ```sbt
-resolvers += Resolver.url("ivy-release-local", url(s"https://jrouly.jfrog.io/artifactory/ivy-release-local"))(Resolver.ivyStylePatterns)
 addSbtPlugin("net.rouly" % "sbt-artifactory" % "version")
 ```
 
