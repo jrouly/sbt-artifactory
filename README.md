@@ -17,16 +17,6 @@ resolvers += Resolver.url("ivy-release-local", url(s"https://jrouly.jfrog.io/art
 addSbtPlugin("net.rouly" % "sbt-artifactory" % "version")
 ```
 
-## Credentials
-
-The plugin anticipates credentials in the environment variables `ARTIFACTORY_USER` and `ARTIFACTORY_PASS`.
-
-You can also set your own [credentials file](https://www.scala-sbt.org/1.x/docs/Publishing.html#Credentials).
-
-### Realm
-
-The default credential realm is set to `Artifactory Realm` but this can be overridden with `artifactoryRealm`.
-
 ## Configuration
 
 ### Artifactory connection
@@ -46,25 +36,36 @@ artifactory := artifactoryHttp("insecure.artifacts.mycompany.biz", "/custom/path
 It is recommended to use `https` for artifact resolution.
 No guarantee is made that `http` will work for sbt versions `0.13` and below.
 
+#### Credentials
+
+The plugin adds `artifactoryCredentials` to your build's `credentials`, based on the `artifactory` setting.
+By default, these credentials anticipate the environment variables `ARTIFACTORY_USER` and `ARTIFACTORY_PASS`.
+
+You can also set your own [credentials file](https://www.scala-sbt.org/1.x/docs/Publishing.html#Credentials).
+
+##### Realm
+
+The default credential realm is set to `Artifactory Realm` but this can be overridden with `artifactoryRealm`.
+
 ### Repository names
 
-By default, the plugin will anticipate the repository names `ivy-{snapshot|release}-local` and `maven-{snapshot|release}-local` based on the value of `publishMavenStyle`.
+By default, the plugin will anticipate the repository names `{ivy|maven}-{snapshot|release}-local` based on the values of `publishMavenStyle` and `isSnapshot`.
 
-If these don't work for you, you can override the settings.
+If these repository names don't work for you, you can override the settings.
 
 ```sbt
-artifactorySnapshotRepository := "sbt-snapshot"
-artifactoryReleaseRepository := "sbt-release"
+artifactorySnapshotRepository := "custom-sbt-snapshot"
+artifactoryReleaseRepository := "custom-sbt-release"
 ```
 
 If you use a single repository for both snapshots and releases, just set the keys to the same value.
 
 ### Publishing
 
-`publishTo` is automagically configured for you.
+`publishTo` is automagically configured and set to `artifactoryResolver`.
 It is aware of snapshot/release and ivy/maven settings by default.
 
-You can override `publishTo` if the defaults don't work for you.
+You can reset `publishTo` if the defaults don't work for you.
 
 ### Resolving
 
@@ -84,10 +85,12 @@ resolvers += Resolver.artifactoryRepo(artifactory.value, "maven-release")
 | `artifactorySnapshotRepository` | `String` | Artifactory snapshot repository label. Defaults to `ivy-snapshot-local` or `maven-snapshot-local`. |
 | `artifactoryReleaseRepository` | `String` | Artifactory release repository label. Defaults to `ivy-release-local` or `maven-release-local`. |
 
-The next two keys are derived from the previous table.
+The next keys are derived from the previous table.
 You probably don't want to override these, but go ahead if you need to.
 
 | Key | Type | Description |
 | --- | ---- | ----------- |
-| `artifactorySnapshotResolver` | `URLRepository` | Artifactory snapshot resolver. |
-| `artifactoryReleaseResolver` | `URLRepository` | Artifactory release resolver. |
+| `artifactoryCredentials` | `Credentials` | Artifactory credentials, derived from environment variables. |
+| `artifactorySnapshotResolver` | `Resolver` | Artifactory snapshot resolver. |
+| `artifactoryReleaseResolver` | `Resolver` | Artifactory release resolver. |
+| `artifactoryResolver` | `Resolver` | Artifactory `publishTo` resolver, switches between snapshot/release. |

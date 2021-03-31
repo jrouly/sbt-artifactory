@@ -28,26 +28,19 @@ object ArtifactoryPlugin extends AutoPlugin {
   override def projectSettings: Seq[Def.Setting[_]] = artifactorySettings ++ publicationSettings
 
   private lazy val publicationSettings = Seq(
-    Keys.publishTo := {
-      val isSnapshot = Keys.isSnapshot.value
-
-      val snapshotResolver = Some(artifactorySnapshotResolver.value)
-      val releaseResolver = Some(artifactoryReleaseResolver.value)
-
-      if (isSnapshot) snapshotResolver
-      else releaseResolver
-    },
-    Keys.credentials += Credentials(
-      realm = artifactoryRealm.value,
-      host = artifactory.value.hostname,
-      userName = sys.env.getOrElse("ARTIFACTORY_USER", "username"),
-      passwd = sys.env.getOrElse("ARTIFACTORY_PASS", "password")
-    )
+    Keys.publishTo := Some(artifactoryResolver.value),
+    Keys.credentials += artifactoryCredentials.value
   )
 
   private lazy val artifactorySettings = Seq(
     artifactory := artifactoryHttp("localhost", "artifactory"),
     artifactoryRealm := "Artifactory Realm",
+    artifactoryCredentials := Credentials(
+      realm = artifactoryRealm.value,
+      host = artifactory.value.hostname,
+      userName = sys.env.getOrElse("ARTIFACTORY_USER", "username"),
+      passwd = sys.env.getOrElse("ARTIFACTORY_PASS", "password")
+    ),
     artifactorySnapshotRepository := {
       val isMaven = Keys.publishMavenStyle.value
       if (isMaven) "maven-snapshot-local"
@@ -69,6 +62,12 @@ object ArtifactoryPlugin extends AutoPlugin {
       val connection = artifactory.value
       if (Keys.publishMavenStyle.value) Resolver.artifactoryRepo(connection, repository)
       else Resolver.artifactoryIvyRepo(connection, repository)
+    },
+    artifactoryResolver := {
+      val isSnapshot = Keys.isSnapshot.value
+      val snapshotResolver = artifactorySnapshotResolver.value
+      val releaseResolver = artifactoryReleaseResolver.value
+      if (isSnapshot) snapshotResolver else releaseResolver
     }
   )
 }
