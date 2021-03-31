@@ -11,7 +11,11 @@ Global / onChangedBuildSource := ReloadOnSourceChanges
 
 enablePlugins(SbtPlugin)
 
-crossSbtVersions := List(
-  "0.13.18",
-  "1.1.6" // https://github.com/sbt/sbt/issues/5049
-)
+crossScalaVersions := Seq("2.10.7", "2.12.10")
+
+pluginCrossBuild / sbtVersion := {
+  scalaBinaryVersion.value match {
+    case "2.10" => "0.13.18"
+    case "2.12" => "1.1.6" // https://github.com/sbt/sbt/issues/5049
+  }
+}

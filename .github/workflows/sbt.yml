@@ -15,7 +15,7 @@ jobs:
           java-version: "adopt@1.8"
       - uses: coursier/cache-action@v5
       - uses: jrouly/scalafmt-native-action@v1
-      - run: csbt ^test ^scripted
+      - run: csbt +test +scripted
 
   release:
     needs: [build]
@@ -26,7 +26,7 @@ jobs:
         with:
           gpg-private-key: ${{ secrets.GPG_SECRET_KEY }}
           passphrase: ${{ secrets.GPG_PASSPHRASE }}
-      - run: csbt ^multiPublish
+      - run: csbt +multiPublish
         env:
           ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
           ARTIFACTORY_PASS: ${{ secrets.ARTIFACTORY_PASS }}

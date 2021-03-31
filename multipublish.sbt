@@ -30,13 +30,13 @@ commands += Command.command("multiPublish") { state =>
   )
 
   Project.runTask(
-    publishSigned in Compile,
+    publishSigned,
     extracted.appendWithSession(sonatypeSettings, state),
     checkCycles = true
   )
 
   Project.runTask(
-    publishSigned in Compile,
+    publishSigned,
     extracted.appendWithSession(artifactorySettings, state),
     checkCycles = true
   )
