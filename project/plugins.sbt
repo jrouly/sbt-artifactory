@@ -8,3 +8,6 @@ resolvers += Resolver.url(
 
 // For publishing to Artifactory.
 addSbtPlugin("net.rouly" % "sbt-artifactory" % "0.3.2")
+
+// Sign releases.
+addSbtPlugin("com.github.sbt" % "sbt-pgp" % "2.1.2")
