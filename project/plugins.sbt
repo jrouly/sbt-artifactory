@@ -7,4 +7,4 @@ resolvers += Resolver.url(
 )(Resolver.ivyStylePatterns)
 
 // For publishing to Artifactory.
-addSbtPlugin("net.rouly" % "sbt-artifactory" % "0.3.1")
+addSbtPlugin("net.rouly" % "sbt-artifactory" % "0.3.2")
