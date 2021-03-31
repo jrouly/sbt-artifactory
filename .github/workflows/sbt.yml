@@ -16,8 +16,10 @@ jobs:
       - uses: coursier/cache-action@v5
       - uses: jrouly/scalafmt-native-action@v1
       - run: csbt ^test ^scripted
-      - run: csbt ^publish
+      - run: csbt ^multiPublish
         if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
         env:
           ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
           ARTIFACTORY_PASS: ${{ secrets.ARTIFACTORY_PASS }}
+          SONATYPE_USER: ${{ secrets.SONATYPE_USER }}
+          SONATYPE_PASS: ${{ secrets.SONATYPE_PASS }}
